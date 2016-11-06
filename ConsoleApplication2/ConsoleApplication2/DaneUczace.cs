@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,16 +8,16 @@ namespace ConsoleApplication2
 {
     class DaneUczace
     {
-        public double[,] zbior_danych;
-        public double[,] zbior_uczacy;
-        public double[,] zbior_walidujacy;
-        public double[,] zbior_indeksow;
+        public ArrayList zbior_danych;
+        public ArrayList zbior_uczacy;
+        public ArrayList zbior_walidujacy;
+        public int[,] zbior_indeksow;
         public DaneUczace()
         {
-            zbior_indeksow = new double[126, 4];
-            zbior_danych = new double[252, 10];
-            zbior_uczacy = new double[178, 10];
-            zbior_walidujacy = new double[75, 10];
+            zbior_indeksow = new int[126, 4];
+            zbior_danych = new ArrayList(252);
+            zbior_uczacy = new ArrayList(177);
+            zbior_walidujacy = new ArrayList(75);
         }
         public void LosujIndeksy()
         {
@@ -44,50 +44,31 @@ namespace ConsoleApplication2
         }
         public void GenerujDane()
         {
-            for (int i =0; i < 126; i++)
+            LosujIndeksy();
+            double[] temp1 = new double[10];
+            double[] temp2 = new double[10];
+            for (int i = 0; i < 252; i++)
             {
-                int j = 0;
-                while(j<zbior_indeksow[i,0])
+                zbior_danych.Add(new double[10]);
+            }
+            for (int i = 0; i < 126; i++)
+            {
+                for (int j = 0; j < 10; j++)
                 {
-                    zbior_danych[i, j] = 0;
-                    zbior_danych[i + 126, j] = 1;
-                    j++;
+                    temp1[j] = 0;
+                    temp2[j] = 1;
                 }
-                zbior_danych[i, j] = 1;
-                zbior_danych[i + 126, j] = 0;
-                j++;
-                while (j < zbior_indeksow[i, 1])
+                for (int j = 0; j < 4; j++)
                 {
-                    zbior_danych[i, j] = 0;
-                    zbior_danych[i + 126, j] = 1;
-                    j++;
+                    temp1[zbior_indeksow[i, j]] = 1;
+                    temp2[zbior_indeksow[i, j]] = 0;
                 }
-                zbior_danych[i, j] = 1;
-                zbior_danych[i + 126, j] = 0;
-                j++;
-                while (j < zbior_indeksow[i, 2])
+                temp1[9] = SprawdzCzyWygralKrzyzyk(temp1);
+                temp2[9] = SprawdzCzyWygralKrzyzyk(temp2);
+                for (int j = 0; j < 10; j++)
                 {
-                    zbior_danych[i, j] = 0;
-                    zbior_danych[i + 126, j] = 1;
-                    j++;
-                }
-                zbior_danych[i, j] = 1;
-                zbior_danych[i + 126, j] = 0;
-                j++;
-                while (j < zbior_indeksow[i, 3])
-                {
-                    zbior_danych[i, j] = 0;
-                    zbior_danych[i + 126, j] = 1;
-                    j++;
-                }
-                zbior_danych[i, j] = 1;
-                zbior_danych[i + 126, j] = 0;
-                j++;
-                while (j<9)
-                {
-                    zbior_danych[i, j] = 0;
-                    zbior_danych[i + 126, j] = 1;
-                    j++;
+                    ((double[])zbior_danych[i])[j] = temp1[j];
+                    ((double[])zbior_danych[i + 126])[j] = temp2[j];
                 }
             }
         }
@@ -112,57 +93,36 @@ namespace ConsoleApplication2
                 wynik = 1;
             return wynik;
         }
-        public void ObliczWyniki()
-        {
-            double[] wiersz = new double[9];
-            for (int i = 0; i<252;i++)
-            {
-                for (int j=0; j< 9; j++)
-                {
-                    wiersz[j] = zbior_danych[i, j];
-                }
-                zbior_danych[i,9] = SprawdzCzyWygralKrzyzyk(wiersz);
-            }
-        }
         public void GenerujZbiorUczacy()
         {
-            double[] tab = new double[252];
-            int licznik = 0;
-            for (int i = 0; i < 252; i++)
+            ArrayList kopiaDanych = new ArrayList(252);
+            for (int i = 0; i<252;i++)
             {
-                tab[i] = 0;
-            }
-            Random rand = new Random();
-            int los = rand.Next(0, 252);
-            tab[los] = 1;
-            licznik++;
-            while (licznik < 75)
-            {
-                while (tab[los] != 0)
+                kopiaDanych.Add(new double[10]);
+                for(int j =0; j < 10; j++)
                 {
-                    los = rand.Next(0, 252);
+                    ((double[])kopiaDanych[i])[j] = ((double[])zbior_danych[i])[j];
                 }
-                tab[los] = 1;
+            }
+            Random r = new Random();
+            int licznik = 0;
+            for (int i = 0; i<177; i++)
+            {
+                int los = r.Next(0, kopiaDanych.Count);
+                zbior_uczacy.Add(new double[10]);
+                for (int j = 0; j < 10; j++)
+                {
+                    ((double[])zbior_uczacy[licznik])[j] = ((double[])kopiaDanych[los])[j];
+                }
+                kopiaDanych.RemoveAt(los);
                 licznik++;
             }
-            int licznik_u=0, licznik_w=0;
-            for (int i = 0; i < 252; i++)
+            for (int i=0; i<75; i++)
             {
-                if (tab[i] == 0)
+                zbior_walidujacy.Add(new double[10]);
+                for (int j =0; j < 10;j++)
                 {
-                    for (int j=0; j<10; j++)
-                    {
-                        zbior_uczacy[licznik_u, j] = zbior_danych[i, j];
-                    }
-                    licznik_u++;
-                }
-                else
-                {
-                    for (int j = 0; j < 10; j++)
-                    {
-                        zbior_walidujacy[licznik_w, j] = zbior_danych[i, j];
-                    }
-                    licznik_w++;
+                    ((double[])zbior_walidujacy[i])[j] = ((double[])kopiaDanych[i])[j];
                 }
             }
         }

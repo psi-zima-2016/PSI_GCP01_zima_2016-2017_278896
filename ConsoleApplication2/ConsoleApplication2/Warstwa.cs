@@ -8,7 +8,7 @@ namespace ConsoleApplication2
 {
     class Warstwa
     {
-        public ArrayList Neurony;
+        /*public ArrayList Neurony;
         public void DodajNeuron(Neuron n)
         {
             Neurony.Add(n);
@@ -78,6 +78,6 @@ namespace ConsoleApplication2
             {
                 n.AktualizujWagi(wspUczenia);
             }
-        }
+        }*/
     }
 }

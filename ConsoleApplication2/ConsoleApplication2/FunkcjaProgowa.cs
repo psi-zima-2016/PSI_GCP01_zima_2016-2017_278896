@@ -10,7 +10,7 @@ namespace ConsoleApplication2
     {
         public double ObliczWartosc(double wejscie)
         {
-            double temp = 0;
+            double temp = -1;
             if (wejscie >= 0)
                 temp = 1;
             return temp;

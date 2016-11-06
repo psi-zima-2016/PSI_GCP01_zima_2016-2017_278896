@@ -48,7 +48,7 @@
     <Compile Include="Polaczenie.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Uczenie.cs" />
+    <Compile Include="Nauka.cs" />
     <Compile Include="Warstwa.cs" />
   </ItemGroup>
   <ItemGroup>
