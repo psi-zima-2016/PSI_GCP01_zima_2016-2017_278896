@@ -8,7 +8,7 @@ namespace ConsoleApplication2
 {
     class Nauka
     {
-        public double wspUczenia;
+        /*public double wspUczenia;
         public int liczbaEpok;
         public double[] listaWag;
         public double[] bledyUczenia;
@@ -74,12 +74,6 @@ namespace ConsoleApplication2
                 neuron.ObliczBlad(((double[])kopiaUczaca[los])[9]);
                 bledy[i] = neuron.blad*neuron.blad;
                 neuron.PoprawWagi(wspUczenia);
-                /*for (int j = 0; j < neuron.liczba_wejsc; j++)
-                {
-                    Console.Write(neuron.wagi[0]);
-                    Console.Write(" ");
-                }
-                Console.WriteLine();*/
                 kopiaUczaca.RemoveAt(los);
             }
             double bladUczenia, suma = 0;
@@ -97,9 +91,10 @@ namespace ConsoleApplication2
             {
                 u = Ucz();
                 bledyUczenia[i] = u;
+                Console.WriteLine(u);
                 w = Waliduj();
                 bledyWalidacji[i] = w;
             }
-        }
+        }*/
     }
 }

@@ -74,7 +74,7 @@ namespace ConsoleApplication2
         }
         public int SprawdzCzyWygralKrzyzyk(double[] plansza)
         {
-            int wynik = 0;
+            int wynik = -1;
             if (plansza[0] == 1 && plansza[3] == 1 && plansza[6] == 1)
                 wynik = 1;
             if (plansza[1] == 1 && plansza[4] == 1 && plansza[7] == 1)

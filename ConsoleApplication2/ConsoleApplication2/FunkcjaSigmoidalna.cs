@@ -6,18 +6,19 @@ using System.Threading.Tasks;
 
 namespace ConsoleApplication2
 {
-    class FunkcjaProgowa : IFunkcjaAktywacji
+    class FunkcjaSigmoidalna : IFunkcjaAktywacji
     {
         public double ObliczWartosc(double wejscie)
         {
-            double temp = -1;
-            if (wejscie >= 0)
-                temp = 1;
+            double temp;
+            temp = 1.0 / (1.0+Math.Exp((-1)*wejscie));
             return temp;
         }
         public double Pochodna(double wejscie)
         {
-            return 1;
+            double temp;
+            temp = ObliczWartosc(wejscie) * (1.0 - ObliczWartosc(wejscie));
+            return temp;
         }
     }
 }

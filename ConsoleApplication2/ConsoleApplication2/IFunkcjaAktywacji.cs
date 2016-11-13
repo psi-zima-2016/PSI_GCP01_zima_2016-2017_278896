@@ -9,5 +9,6 @@ namespace ConsoleApplication2
     interface IFunkcjaAktywacji
     {
         double ObliczWartosc(double wejscie);
+        double Pochodna(double wejscie);
     }
 }

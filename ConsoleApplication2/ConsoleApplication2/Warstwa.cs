@@ -8,7 +8,7 @@ namespace ConsoleApplication2
 {
     class Warstwa
     {
-        /*public ArrayList Neurony;
+        public ArrayList Neurony;
         public void DodajNeuron(Neuron n)
         {
             Neurony.Add(n);
@@ -35,14 +35,14 @@ namespace ConsoleApplication2
                 n.LosujWagi(min, max, r);
             }
         }
-        public void UstawWyjscia(double[] wektorWejsciowy)
+        /*public void UstawWyjscia(double[] wektorWejsciowy)
         {
             for (int i = 0; i < Neurony.Count; i++)
             {
                 ((Neuron)Neurony[i]).wyjscie = wektorWejsciowy[i];
             }
-        }
-        public double[] ZwrocWyjscia()
+        }*/
+        /*public double[] ZwrocWyjscia()
         {
             double[] wektorWyjsciowy = new double[Neurony.Count];
             for (int i =0; i < Neurony.Count; i++)
@@ -50,7 +50,7 @@ namespace ConsoleApplication2
                 wektorWyjsciowy[i] = ((Neuron)Neurony[i]).wyjscie;
             }
             return wektorWyjsciowy;
-        }
+        }*/
         public void ObliczWyjscia()
         {
             foreach (Neuron n in Neurony)
@@ -65,19 +65,12 @@ namespace ConsoleApplication2
                 ((Neuron)Neurony[i]).ObliczBlad(poprWyjscia[i]);
             }
         }
-        public void ZerujBledy()
-        {
-            foreach (Neuron n in Neurony)
-            {
-                n.blad = 0.0;
-            }
-        }
         public void PoprawWagi(double wspUczenia)
         {
             foreach(Neuron n in Neurony)
             {
-                n.AktualizujWagi(wspUczenia);
+                n.PoprawWagi(wspUczenia);
             }
-        }*/
+        }
     }
 }

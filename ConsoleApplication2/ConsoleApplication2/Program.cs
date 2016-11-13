@@ -24,10 +24,11 @@ namespace ConsoleApplication2
 
         static void Main(string[] args)
         {
-            Random r = new Random();
+            //uczenie perceptronów
+            /*Random r = new Random();
             FunkcjaProgowa f = new FunkcjaProgowa();
             int liczba_wejsc = 9;
-            int liczbaNeuronow = 100;
+            int liczbaNeuronow = 1;
             int liczbaEpok = 100;
             double min = -5, max = 5;
 
@@ -42,9 +43,20 @@ namespace ConsoleApplication2
                 uczoneNeurony[i].neuron.LosujWagi(min,max,r);
                 uczoneNeurony[i].ZapiszWagi();
                 uczoneNeurony[i].Uczenie();
-            }
+            }*/
 
-            FileStream fileStream = new FileStream("C:\\Users\\Dell Latitude 3330\\wszystkie_neurony.csv", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+            Random r = new Random();
+            FunkcjaSigmoidalna f = new FunkcjaSigmoidalna();
+            Neuron n = new Neuron(f);
+            Neuron x = new Neuron(f);
+            n.DodajWejscie(x);
+            n.LosujWagi(-5,5,r);
+            Console.WriteLine(((Polaczenie)n.wejscia[0]).waga);
+
+
+
+            //zapis wyników do plików
+            /*FileStream fileStream = new FileStream("C:\\Users\\Dell Latitude 3330\\wszystkie_neurony.csv", FileMode.OpenOrCreate, FileAccess.ReadWrite);
             StreamWriter streamWriter = new StreamWriter(fileStream);
 
             double[] bledyNeuronow = new double[liczbaNeuronow];
@@ -88,7 +100,7 @@ namespace ConsoleApplication2
             {
                 streamWriter.WriteLine(uczoneNeurony[naj_neuron].listaWag[i]);
             }
-            streamWriter.Close();
+            streamWriter.Close();*/
             Console.Read();
         }
     }

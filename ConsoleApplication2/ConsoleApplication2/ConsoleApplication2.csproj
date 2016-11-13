@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="DaneUczace.cs" />
     <Compile Include="FunkcjaProgowa.cs" />
+    <Compile Include="FunkcjaSigmoidalna.cs" />
     <Compile Include="IFunkcjaAktywacji.cs" />
     <Compile Include="Neuron.cs" />
     <Compile Include="Polaczenie.cs" />
