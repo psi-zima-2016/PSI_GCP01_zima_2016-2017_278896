@@ -69,18 +69,33 @@ namespace ConsoleApplication2
                 }
             }
             Random r = new Random();
+            //tablica błędów cząstkowych epoki
             double[] bledy = new double[177];
             for (int i = 0; i<177; i++)
             {
                 int los = r.Next(0, kopiaUczaca.Count);
                 ((Warstwa)siec.wejscia_sieci).UstawWyjscia((double[])kopiaUczaca[los]);
+                foreach (Warstwa w in siec.warstwy)
+                {
+                    w.ZerujBledy();
+                }
                 siec.ObliczWyjscia();
                 double[] temp = new double[1];
                 temp[0] = ((double[])kopiaUczaca[los])[9];
                 double tempBlad;
+                ((Warstwa)siec.warstwy[siec.warstwy.Count - 1]).ObliczBledy(temp);
                 tempBlad = siec.ObliczBlad(temp);
                 bledy[i] = tempBlad*tempBlad;
-                siec.poprawWagi(wspUczenia);
+                //rzutowanie błędów wstecz
+                for (int j = siec.warstwy.Count - 1; j >= 0; j--)
+                {
+                    ((Warstwa)siec.warstwy[j]).RzutujBledy();
+                }
+                //poprawienie wag
+                for (int j = 0; j < siec.warstwy.Count; j++)
+                {
+                    ((Warstwa)siec.warstwy[j]).PoprawWagi(wspUczenia);
+                }
                 kopiaUczaca.RemoveAt(los); //usuwamy wykorzystane wektor z listy
             }
             double bladUczenia, suma = 0;

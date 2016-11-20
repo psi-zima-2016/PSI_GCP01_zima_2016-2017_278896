@@ -44,7 +44,6 @@ namespace ConsoleApplication2
         public double ObliczBlad(double[] poprWyjscie)
         {
             double suma_bledow = 0;
-            ((Warstwa)warstwy[warstwy.Count - 1]).ObliczBledy(poprWyjscie);
             foreach(Neuron n in ((Warstwa)warstwy[warstwy.Count-1]).Neurony)
             {
                 suma_bledow += n.blad;

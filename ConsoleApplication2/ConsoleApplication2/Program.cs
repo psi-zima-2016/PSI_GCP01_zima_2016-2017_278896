@@ -36,8 +36,10 @@ namespace ConsoleApplication2
             Nauka[] uczoneSieci = new Nauka[liczbaSieci];
             for (int i = 0; i < liczbaSieci; i++)
             {
-                uczoneSieci[i] = new Nauka(liczbaEpok, 0.6, new Siec(1), dane);
+                uczoneSieci[i] = new Nauka(liczbaEpok, 0.3, new Siec(1), dane);
                 uczoneSieci[i].siec.wejscia_sieci = new Warstwa(9, f);
+                uczoneSieci[i].siec.DodajWarstwe(new Warstwa(9, f));
+                uczoneSieci[i].siec.DodajWarstwe(new Warstwa(5, f));
                 uczoneSieci[i].siec.DodajWarstwe(new Warstwa(1, f));
                 uczoneSieci[i].siec.PolaczWarstwy();
                 uczoneSieci[i].siec.LosujWagi(-5,5,r);

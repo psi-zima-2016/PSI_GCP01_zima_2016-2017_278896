@@ -58,11 +58,25 @@ namespace ConsoleApplication2
                 n.ObliczWyjscie();
             }
         }
+        public void ZerujBledy()
+        {
+            foreach (Neuron n in Neurony)
+            {
+                n.blad = 0.0;
+            }
+        }
         public void ObliczBledy(double[] poprWyjscia)
         {
             for (int i = 0; i < Neurony.Count; i++)
             {
                 ((Neuron)Neurony[i]).ObliczBlad(poprWyjscia[i]);
+            }
+        }
+        public void RzutujBledy()
+        {
+            foreach (Neuron n in Neurony)
+            {
+                n.RzutujBledy();
             }
         }
         public void PoprawWagi(double wspUczenia)

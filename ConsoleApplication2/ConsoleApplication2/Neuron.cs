@@ -58,15 +58,22 @@ namespace ConsoleApplication2
         }
         public void ObliczBlad(double poprWyjscie)
         {
-            blad = (poprWyjscie - wyjscie) * funkcja.Pochodna(wyjscie);
+            blad = (poprWyjscie - wyjscie);
         }
         public void PoprawWagi(double wspUczenia)
         {
             foreach (Polaczenie p in wejscia)
             {
-                p.waga += wspUczenia * blad * p.n.wyjscie;
+                p.waga += wspUczenia * blad * funkcja.Pochodna(wyjscie)*p.n.wyjscie;
             }
-            wagaBiasu += wspUczenia * blad;
+            wagaBiasu += wspUczenia * blad * funkcja.Pochodna(wyjscie);
+        }
+        public void RzutujBledy()
+        {
+            foreach(Polaczenie p in wejscia)
+            {
+                p.n.blad += blad * p.waga;
+            }
         }
         /*public void ObliczWyjscie()
         {
