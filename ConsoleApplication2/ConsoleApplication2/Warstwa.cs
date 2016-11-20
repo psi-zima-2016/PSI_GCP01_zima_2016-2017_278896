@@ -35,13 +35,13 @@ namespace ConsoleApplication2
                 n.LosujWagi(min, max, r);
             }
         }
-        /*public void UstawWyjscia(double[] wektorWejsciowy)
+        public void UstawWyjscia(double[] wektorWejsciowy)
         {
             for (int i = 0; i < Neurony.Count; i++)
             {
                 ((Neuron)Neurony[i]).wyjscie = wektorWejsciowy[i];
             }
-        }*/
+        }
         /*public double[] ZwrocWyjscia()
         {
             double[] wektorWyjsciowy = new double[Neurony.Count];

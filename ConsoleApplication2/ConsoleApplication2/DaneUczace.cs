@@ -40,7 +40,6 @@ namespace ConsoleApplication2
                     }
                 }
             }
-            Console.WriteLine(iterator);
         }
         public void GenerujDane()
         {

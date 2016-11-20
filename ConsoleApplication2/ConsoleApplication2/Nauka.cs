@@ -8,42 +8,45 @@ namespace ConsoleApplication2
 {
     class Nauka
     {
-        /*public double wspUczenia;
+        public double wspUczenia;
         public int liczbaEpok;
-        public double[] listaWag;
+        //public double[] listaWag;
         public double[] bledyUczenia;
         public double[] bledyWalidacji;
         ArrayList listaUczaca;
         ArrayList listaWalidujaca;
-        public Neuron neuron;
-        public Nauka(int liczbaEpok, double wspUczenia, Neuron neuron, DaneUczace dane)
+        public Siec siec;
+        public Nauka(int liczbaEpok, double wspUczenia, Siec siec, DaneUczace dane)
         {
             this.liczbaEpok = liczbaEpok;
             this.wspUczenia = wspUczenia;
             bledyUczenia = new double[liczbaEpok];
             bledyWalidacji = new double[liczbaEpok];
-            this.neuron = neuron;
-            listaWag = new double[neuron.liczba_wejsc+1];
+            this.siec = siec;
+            //listaWag = new double[neuron.liczba_wejsc+1];
             listaUczaca = dane.zbior_uczacy;
             listaWalidujaca = dane.zbior_walidujacy;
         }
-        public void ZapiszWagi()
+        /*public void ZapiszWagi()
         {
             for (int i =0; i<neuron.liczba_wejsc; i++)
             {
                 listaWag[i] = neuron.wagi[i];
             }
             listaWag[neuron.liczba_wejsc] = neuron.wagaBiasu;
-        }
+        }*/
         public double Waliduj()
         {
             double[] bledy = new double[75];
             for (int i = 0; i < 75; i++)
             {
-                neuron.UstawWejscia((double[])listaWalidujaca[i]);
-                neuron.ObliczWyjscie();
-                neuron.ObliczBlad(((double[])listaWalidujaca[i])[9]);
-                bledy[i] = neuron.blad*neuron.blad;
+                ((Warstwa)siec.wejscia_sieci).UstawWyjscia((double[])listaWalidujaca[i]);
+                siec.ObliczWyjscia();
+                double[] temp = new double[1];
+                temp[0] = ((double[])listaWalidujaca[i])[9];
+                double tempBlad;
+                tempBlad = siec.ObliczBlad(temp);
+                bledy[i] = tempBlad * tempBlad;
             }
             double bladWalidacji, suma = 0;
             for (int i=0; i < 75; i++)
@@ -55,6 +58,7 @@ namespace ConsoleApplication2
         }
         public double Ucz()
         {
+            //kopiowanie listy uczącej
             ArrayList kopiaUczaca = new ArrayList();
             for (int i = 0; i < 177; i++)
             {
@@ -69,12 +73,15 @@ namespace ConsoleApplication2
             for (int i = 0; i<177; i++)
             {
                 int los = r.Next(0, kopiaUczaca.Count);
-                neuron.UstawWejscia((double[])kopiaUczaca[los]);
-                neuron.ObliczWyjscie();
-                neuron.ObliczBlad(((double[])kopiaUczaca[los])[9]);
-                bledy[i] = neuron.blad*neuron.blad;
-                neuron.PoprawWagi(wspUczenia);
-                kopiaUczaca.RemoveAt(los);
+                ((Warstwa)siec.wejscia_sieci).UstawWyjscia((double[])kopiaUczaca[los]);
+                siec.ObliczWyjscia();
+                double[] temp = new double[1];
+                temp[0] = ((double[])kopiaUczaca[los])[9];
+                double tempBlad;
+                tempBlad = siec.ObliczBlad(temp);
+                bledy[i] = tempBlad*tempBlad;
+                siec.poprawWagi(wspUczenia);
+                kopiaUczaca.RemoveAt(los); //usuwamy wykorzystane wektor z listy
             }
             double bladUczenia, suma = 0;
             for (int i = 0; i<177; i++)
@@ -91,10 +98,9 @@ namespace ConsoleApplication2
             {
                 u = Ucz();
                 bledyUczenia[i] = u;
-                Console.WriteLine(u);
                 w = Waliduj();
                 bledyWalidacji[i] = w;
             }
-        }*/
+        }
     }
 }
