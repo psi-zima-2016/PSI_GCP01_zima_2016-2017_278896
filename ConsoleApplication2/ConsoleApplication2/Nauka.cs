@@ -9,6 +9,7 @@ namespace ConsoleApplication2
     class Nauka
     {
         public double wspUczenia;
+        public double wspZapominania;
         public int liczbaEpok;
         //public double[] listaWag;
         public double[] bledyUczenia;
@@ -20,6 +21,7 @@ namespace ConsoleApplication2
         {
             this.liczbaEpok = liczbaEpok;
             this.wspUczenia = wspUczenia;
+            wspZapominania = 0;
             bledyUczenia = new double[liczbaEpok];
             bledyWalidacji = new double[liczbaEpok];
             this.siec = siec;
@@ -100,6 +102,100 @@ namespace ConsoleApplication2
             }
             double bladUczenia, suma = 0;
             for (int i = 0; i<177; i++)
+            {
+                suma += bledy[i];
+            }
+            bladUczenia = suma / 177;
+            return bladUczenia;
+        }
+        public double UczRegulaOji()
+        {
+            //kopiowanie listy uczącej
+            ArrayList kopiaUczaca = new ArrayList();
+            for (int i = 0; i < 177; i++)
+            {
+                kopiaUczaca.Add(new double[12]);
+                for (int j = 0; j < 12; j++)
+                {
+                    ((double[])kopiaUczaca[i])[j] = ((double[])listaUczaca[i])[j];
+                }
+            }
+            Random r = new Random();
+            //tablica błędów cząstkowych epoki
+            double[] bledy = new double[177];
+            for (int i = 0; i < 177; i++)
+            {
+                int los = r.Next(0, kopiaUczaca.Count);
+                ((Warstwa)siec.wejscia_sieci).UstawWyjscia((double[])kopiaUczaca[los]);
+                foreach (Warstwa w in siec.warstwy)
+                {
+                    w.ZerujBledy();
+                }
+                siec.ObliczWyjscia();
+                double[] temp = new double[3];
+                temp[0] = ((double[])kopiaUczaca[los])[9];
+                temp[1] = ((double[])kopiaUczaca[los])[10];
+                temp[2] = ((double[])kopiaUczaca[los])[11];
+                double tempBlad;
+                ((Warstwa)siec.warstwy[siec.warstwy.Count - 1]).ObliczBledy(temp);
+                tempBlad = siec.ObliczBlad(temp);
+                bledy[i] = tempBlad * tempBlad;
+                //poprawienie wag
+                foreach (Warstwa w in siec.warstwy)
+                {
+                    w.PoprawWagiOji(wspUczenia, temp);
+                }
+                kopiaUczaca.RemoveAt(los); //usuwamy wykorzystany wektor z listy
+            }
+            double bladUczenia, suma = 0;
+            for (int i = 0; i < 177; i++)
+            {
+                suma += bledy[i];
+            }
+            bladUczenia = suma / 177;
+            return bladUczenia;
+        }
+        public double UczRegulaHebba(double wsp_zapominania)
+        {
+            //kopiowanie listy uczącej
+            ArrayList kopiaUczaca = new ArrayList();
+            for (int i = 0; i < 177; i++)
+            {
+                kopiaUczaca.Add(new double[12]);
+                for (int j = 0; j < 12; j++)
+                {
+                    ((double[])kopiaUczaca[i])[j] = ((double[])listaUczaca[i])[j];
+                }
+            }
+            Random r = new Random();
+            //tablica błędów cząstkowych epoki
+            double[] bledy = new double[177];
+            for (int i = 0; i < 177; i++)
+            {
+                int los = r.Next(0, kopiaUczaca.Count);
+                ((Warstwa)siec.wejscia_sieci).UstawWyjscia((double[])kopiaUczaca[los]);
+                foreach (Warstwa w in siec.warstwy)
+                {
+                    w.ZerujBledy();
+                }
+                siec.ObliczWyjscia();
+                double[] temp = new double[3];
+                temp[0] = ((double[])kopiaUczaca[los])[9];
+                temp[1] = ((double[])kopiaUczaca[los])[10];
+                temp[2] = ((double[])kopiaUczaca[los])[11];
+                double tempBlad;
+                ((Warstwa)siec.warstwy[siec.warstwy.Count - 1]).ObliczBledy(temp);
+                tempBlad = siec.ObliczBlad(temp);
+                bledy[i] = tempBlad * tempBlad;
+                //poprawienie wag
+                foreach (Warstwa w in siec.warstwy)
+                {
+                    w.PoprawWagiHebb(wspUczenia, wspZapominania, temp);
+                }
+                kopiaUczaca.RemoveAt(los); //usuwamy wykorzystany wektor z listy
+            }
+            double bladUczenia, suma = 0;
+            for (int i = 0; i < 177; i++)
             {
                 suma += bledy[i];
             }

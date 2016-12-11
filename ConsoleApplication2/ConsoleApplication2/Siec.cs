@@ -15,6 +15,13 @@ namespace ConsoleApplication2
             warstwy = new ArrayList(liczba_warstw);
             wejscia_sieci = null;
         }
+        public void NormalizujWagi()
+        {
+            foreach (Neuron n in ((Warstwa)warstwy[0]).Neurony)
+            {
+                n.NormalizujWagi();
+            }
+        }
         public void DodajWarstwe(Warstwa w)
         {
             warstwy.Add(w);
@@ -41,6 +48,15 @@ namespace ConsoleApplication2
                 ((Warstwa)warstwy[i]).ObliczWyjscia();
             }
         }
+        public double ZwrocWyjscie()
+        {
+            double sumaWyjsc = 0;
+            for (int i = 0; i<((Warstwa)warstwy[warstwy.Count-1]).Neurony.Count; i++)
+            {
+                sumaWyjsc += ((Neuron)((Warstwa)warstwy[warstwy.Count - 1]).Neurony[i]).wyjscie;
+            }
+            return sumaWyjsc;
+        }
         public double ObliczBlad(double[] poprWyjscie)
         {
             double suma_bledow = 0;
@@ -53,6 +69,20 @@ namespace ConsoleApplication2
         public void poprawWagi(double wspUczenia)
         {
             ((Warstwa)warstwy[warstwy.Count - 1]).PoprawWagi(wspUczenia);
+        }
+        public void PoprawWagiWTA(double wspUczenia)
+        {
+            foreach (Warstwa w in warstwy)
+            {
+                w.PoprawWagiWTA(wspUczenia);
+            }
+        }
+        public void zerujBias()
+        {
+            foreach (Warstwa w in warstwy)
+            {
+                w.ZerujBias();
+            }
         }
     }
 }

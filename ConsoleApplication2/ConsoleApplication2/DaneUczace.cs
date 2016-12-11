@@ -44,15 +44,15 @@ namespace ConsoleApplication2
         public void GenerujDane()
         {
             LosujIndeksy();
-            double[] temp1 = new double[10];
-            double[] temp2 = new double[10];
+            double[] temp1 = new double[12];
+            double[] temp2 = new double[12];
             for (int i = 0; i < 252; i++)
             {
-                zbior_danych.Add(new double[10]);
+                zbior_danych.Add(new double[12]);
             }
             for (int i = 0; i < 126; i++)
             {
-                for (int j = 0; j < 10; j++)
+                for (int j = 0; j < 12; j++)
                 {
                     temp1[j] = 0;
                     temp2[j] = 1;
@@ -62,9 +62,43 @@ namespace ConsoleApplication2
                     temp1[zbior_indeksow[i, j]] = 1;
                     temp2[zbior_indeksow[i, j]] = 0;
                 }
-                temp1[9] = SprawdzCzyWygralKrzyzyk(temp1);
-                temp2[9] = SprawdzCzyWygralKrzyzyk(temp2);
-                for (int j = 0; j < 10; j++)
+                if (SprawdzCzyWygralKrzyzyk(temp1) == 1)
+                {
+                    temp1[9] = 1;
+                    temp1[10] = -1;
+                    temp1[11] = -1;
+                }
+                if (SprawdzCzyWygralKrzyzyk(temp1) == 0)
+                {
+                    temp1[9] = -1;
+                    temp1[10] = 1;
+                    temp1[11] = -1;
+                }
+                if (SprawdzCzyWygralKrzyzyk(temp1) == -1)
+                {
+                    temp1[9] = -1;
+                    temp1[10] = -1;
+                    temp1[11] = 1;
+                }
+                if (SprawdzCzyWygralKrzyzyk(temp2) == 1)
+                {
+                    temp1[9] = 1;
+                    temp1[10] = -1;
+                    temp1[11] = -1;
+                }
+                if (SprawdzCzyWygralKrzyzyk(temp2) == 0)
+                {
+                    temp1[9] = -1;
+                    temp1[10] = 1;
+                    temp1[11] = -1;
+                }
+                if (SprawdzCzyWygralKrzyzyk(temp2) == -1)
+                {
+                    temp1[9] = -1;
+                    temp1[10] = -1;
+                    temp1[11] = 1;
+                }
+                for (int j = 0; j < 12; j++)
                 {
                     ((double[])zbior_danych[i])[j] = temp1[j];
                     ((double[])zbior_danych[i + 126])[j] = temp2[j];
@@ -73,53 +107,50 @@ namespace ConsoleApplication2
         }
         public int SprawdzCzyWygralKrzyzyk(double[] plansza)
         {
-            int wynik = -1;
-            if (plansza[0] == 1 && plansza[3] == 1 && plansza[6] == 1)
-                wynik = 1;
-            if (plansza[1] == 1 && plansza[4] == 1 && plansza[7] == 1)
-                wynik = 1;
-            if (plansza[2] == 1 && plansza[5] == 1 && plansza[8] == 1)
-                wynik = 1;
-            if (plansza[0] == 1 && plansza[1] == 1 && plansza[2] == 1)
-                wynik = 1;
-            if (plansza[3] == 1 && plansza[4] == 1 && plansza[5] == 1)
-                wynik = 1;
-            if (plansza[6] == 1 && plansza[7] == 1 && plansza[8] == 1)
-                wynik = 1;
-            if (plansza[0] == 1 && plansza[4] == 1 && plansza[8] == 1)
-                wynik = 1;
-            if (plansza[2] == 1 && plansza[4] == 1 && plansza[6] == 1)
-                wynik = 1;
-            return wynik;
+            int temp = -1;
+            for (int i = 0; i < 3; i++)
+            {
+                if (plansza[i * 3 + 0] != -1 && plansza[i * 3 + 1] == plansza[i * 3 + 0] && plansza[i * 3 + 2] == plansza[i * 3 + 0])
+                    temp = (int)plansza[i * 3 + 0];
+                if (plansza[i + 0] != -1 && plansza[i + 3] == plansza[i + 0] && plansza[i + 6] == plansza[i + 0])
+                    temp = (int)plansza[i + 0];
+            }
+            if (plansza[0] != -1 && plansza[4] == plansza[0] && plansza[8] == plansza[0])
+                temp = (int)plansza[0];
+            if (plansza[2] != -1 && plansza[4] == plansza[2] && plansza[6] == plansza[2])
+                temp = (int)plansza[2];
+            return temp;
         }
         public void GenerujZbiorUczacy()
         {
             ArrayList kopiaDanych = new ArrayList(252);
             for (int i = 0; i<252;i++)
             {
-                kopiaDanych.Add(new double[10]);
-                for(int j =0; j < 10; j++)
+                kopiaDanych.Add(new double[12]);
+                for(int j =0; j < 12; j++)
                 {
                     ((double[])kopiaDanych[i])[j] = ((double[])zbior_danych[i])[j];
                 }
             }
             Random r = new Random();
             int licznik = 0;
+            //generacja zbioru uczącego
             for (int i = 0; i<177; i++)
             {
                 int los = r.Next(0, kopiaDanych.Count);
-                zbior_uczacy.Add(new double[10]);
-                for (int j = 0; j < 10; j++)
+                zbior_uczacy.Add(new double[12]);
+                for (int j = 0; j < 12; j++)
                 {
                     ((double[])zbior_uczacy[licznik])[j] = ((double[])kopiaDanych[los])[j];
                 }
                 kopiaDanych.RemoveAt(los);
                 licznik++;
             }
+            //generacja zbioru walidującego
             for (int i=0; i<75; i++)
             {
-                zbior_walidujacy.Add(new double[10]);
-                for (int j =0; j < 10;j++)
+                zbior_walidujacy.Add(new double[12]);
+                for (int j =0; j < 12; j++)
                 {
                     ((double[])zbior_walidujacy[i])[j] = ((double[])kopiaDanych[i])[j];
                 }

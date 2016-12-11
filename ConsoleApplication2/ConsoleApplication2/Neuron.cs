@@ -27,6 +27,41 @@ namespace ConsoleApplication2
             wagaBiasu = 0.0;
             blad = 0.0;
         }
+        public double ObliczDlugoscWektora(double[] wektor)
+        {
+            double sumaWsp = 0;
+            for (int i = 0; i < wektor.Length; i++)
+            {
+                sumaWsp += Math.Pow(wektor[i], 2);
+            }
+            return Math.Sqrt(sumaWsp);
+        }
+        public double[] NormalizujWektor(double[] wektor)
+        {
+            double normaWektora;
+            normaWektora = ObliczDlugoscWektora(wektor);
+            if (normaWektora != 0)
+            {
+                for (int i = 0; i < wektor.Length; i++)
+                {
+                    wektor[i] /= normaWektora;
+                }
+            }
+            return wektor;
+        }
+        public void NormalizujWagi()
+        {
+            double[] wektorWag = new double[wejscia.Count];
+            for (int i =0; i < wektorWag.Length; i++)
+            {
+                wektorWag[i] = ((Polaczenie)wejscia[i]).waga;
+            }
+            NormalizujWektor(wektorWag);
+            for (int i = 0; i < wektorWag.Length; i++)
+            {
+                ((Polaczenie)wejscia[i]).waga = wektorWag[i];
+            }
+        }
         public void DodajWejscie(Neuron n)
         {
             wejscia.Add(new Polaczenie(n, 1.0));
@@ -67,6 +102,33 @@ namespace ConsoleApplication2
                 p.waga += wspUczenia * blad * funkcja.Pochodna(wyjscie)*p.n.wyjscie;
             }
             wagaBiasu += wspUczenia * blad * funkcja.Pochodna(wyjscie);
+        }
+        public void PoprawWagiWTA(double wspUczenia)
+        {
+            foreach (Polaczenie p in wejscia)
+            {
+                p.waga += wspUczenia * (p.n.wyjscie - p.waga);
+            }
+        }
+        public void PoprawWagiHebb(double wspUczenia, double wspZapominania, double poprWyjscie)
+        {
+            foreach (Polaczenie p in wejscia)
+            {
+                p.waga = p.waga*(1-wspZapominania) + wspUczenia*p.n.wyjscie*poprWyjscie;
+            }
+            wagaBiasu = wagaBiasu * (1 - wspZapominania) + wspUczenia * poprWyjscie;
+        }
+        public void PoprawWagiOji(double wspUczenia, double poprWyjscie)
+        {
+            foreach (Polaczenie p in wejscia)
+            {
+                p.waga += wspUczenia * poprWyjscie * (p.n.wyjscie - poprWyjscie*p.waga);
+            }
+            wagaBiasu += wspUczenia * poprWyjscie * (poprWyjscie * wagaBiasu);
+        }
+        public void ZerujBias()
+        {
+            wagaBiasu = 0;
         }
         public void RzutujBledy()
         {

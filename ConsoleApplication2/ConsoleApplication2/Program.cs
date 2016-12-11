@@ -25,32 +25,29 @@ namespace ConsoleApplication2
         static void Main(string[] args)
         {
             Random r = new Random();
-            FunkcjaSigmoidalna f = new FunkcjaSigmoidalna();
-            int liczbaEpok = 100;
-            int liczbaSieci = 100;
+            FunkcjaLiniowa f = new FunkcjaLiniowa();
+            int liczbaEpok = 1;
+            //int liczbaSieci = 100;
 
             DaneUczace dane = new DaneUczace();
             dane.GenerujDane();
             dane.GenerujZbiorUczacy();
 
-            Nauka[] uczoneSieci = new Nauka[liczbaSieci];
-            for (int i = 0; i < liczbaSieci; i++)
-            {
-                uczoneSieci[i] = new Nauka(liczbaEpok, 0.3, new Siec(1), dane);
-                uczoneSieci[i].siec.wejscia_sieci = new Warstwa(9, f);
-                uczoneSieci[i].siec.DodajWarstwe(new Warstwa(9, f));
-                uczoneSieci[i].siec.DodajWarstwe(new Warstwa(5, f));
-                uczoneSieci[i].siec.DodajWarstwe(new Warstwa(1, f));
-                uczoneSieci[i].siec.PolaczWarstwy();
-                uczoneSieci[i].siec.LosujWagi(-5,5,r);
-                //uczoneSieci[i].ZapiszWagi();
-                uczoneSieci[i].Uczenie();
-            }
+            ArrayList sieci = new ArrayList();
+            Siec siecWTA = new Siec(1);
+            siecWTA.wejscia_sieci = new Warstwa(9, f);
+            siecWTA.DodajWarstwe(new Warstwa(1, f));
+            siecWTA.PolaczWarstwy();
+            siecWTA.LosujWagi(-1, 1, r);
+            sieci.Add(siecWTA);
+
+            WTA wta = new WTA(liczbaEpok, 0.1, sieci, dane);
+            wta.Ucz();
 
             Console.WriteLine("Zakonczono uczenie!");
     
                 //zapis wyników do plików
-                FileStream fileStream = new FileStream("C:\\Users\\Dell Latitude 3330\\wszystkie_sieci.csv", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                /*FileStream fileStream = new FileStream("C:\\Users\\Dell Latitude 3330\\wszystkie_sieci.csv", FileMode.OpenOrCreate, FileAccess.ReadWrite);
                 StreamWriter streamWriter = new StreamWriter(fileStream);
 
                 double[] bledySieci = new double[liczbaSieci];
@@ -85,7 +82,7 @@ namespace ConsoleApplication2
                 {
                     streamWriter.WriteLine(uczoneSieci[naj_siec].bledyWalidacji[i]);
                 }
-                streamWriter.Close();
+                streamWriter.Close();*/
 
                 /*fileStream = new FileStream("C:\\Users\\Dell Latitude 3330\\naj_neuron_wagi.csv", FileMode.OpenOrCreate, FileAccess.ReadWrite);
                 streamWriter = new StreamWriter(fileStream);
@@ -95,7 +92,7 @@ namespace ConsoleApplication2
                     streamWriter.WriteLine(uczoneNeurony[naj_neuron].listaWag[i]);
                 }
                 streamWriter.Close();*/
-                Console.WriteLine("Zapisano do pliku!");
+                //Console.WriteLine("Zapisano do pliku!");
                 Console.Read();
         }
     }

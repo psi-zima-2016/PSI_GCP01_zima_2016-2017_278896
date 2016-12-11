@@ -86,5 +86,33 @@ namespace ConsoleApplication2
                 n.PoprawWagi(wspUczenia);
             }
         }
+        public void PoprawWagiWTA(double wspUczenia)
+        {
+            foreach (Neuron n in Neurony)
+            {
+                n.PoprawWagiWTA(wspUczenia);
+            }
+        }
+        public void PoprawWagiHebb(double wspUczenia, double wspZapominania, double[] poprWyjscie)
+        {
+            for (int i = 0; i < Neurony.Count; i++)
+            {
+                ((Neuron)Neurony[i]).PoprawWagiHebb(wspUczenia, wspZapominania, poprWyjscie[i]);
+            }
+        }
+        public void PoprawWagiOji(double wspUczenia, double[] poprWyjscie)
+        {
+            for (int i = 0; i < Neurony.Count; i++)
+            {
+                ((Neuron)Neurony[i]).PoprawWagiOji(wspUczenia, poprWyjscie[i]);
+            }
+        }
+        public void ZerujBias()
+        {
+            foreach (Neuron n in Neurony)
+            {
+                n.ZerujBias();
+            }
+        }
     }
 }
