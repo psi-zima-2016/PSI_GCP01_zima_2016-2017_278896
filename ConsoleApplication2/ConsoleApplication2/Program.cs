@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,8 +27,8 @@ namespace ConsoleApplication2
         {
             Random r = new Random();
             FunkcjaLiniowa f = new FunkcjaLiniowa();
-            int liczbaEpok = 1;
-            //int liczbaSieci = 100;
+            int liczbaEpok = 100;
+            int liczbaSieci = 100;
 
             DaneUczace dane = new DaneUczace();
             dane.GenerujDane();
@@ -38,13 +39,48 @@ namespace ConsoleApplication2
             siecWTA.wejscia_sieci = new Warstwa(9, f);
             siecWTA.DodajWarstwe(new Warstwa(1, f));
             siecWTA.PolaczWarstwy();
-            siecWTA.LosujWagi(-1, 1, r);
+            Siec siecWTA1 = new Siec(1);
+            siecWTA1.wejscia_sieci = new Warstwa(9, f);
+            siecWTA1.DodajWarstwe(new Warstwa(1, f));
+            siecWTA1.PolaczWarstwy();
+            Siec siecWTA2 = new Siec(1);
+            siecWTA2.wejscia_sieci = new Warstwa(9, f);
+            siecWTA2.DodajWarstwe(new Warstwa(1, f));
+            siecWTA2.PolaczWarstwy();
             sieci.Add(siecWTA);
+            sieci.Add(siecWTA1);
+            sieci.Add(siecWTA2);
 
-            WTA wta = new WTA(liczbaEpok, 0.1, sieci, dane);
-            wta.Ucz();
+            FileStream fileStream = new FileStream("C:\\Users\\Dell Latitude 3330\\Klasyfikacja.csv", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+            StreamWriter streamWriter = new StreamWriter(fileStream);
+
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            for (int i = 0; i < liczbaSieci; i++)
+            {
+                for (int j = 0; j < sieci.Count; j++)
+                    ((Siec)sieci[j]).LosujWagi(-1, 1, r);
+                WTA wta = new WTA(liczbaEpok, 0.1, sieci, dane);
+                for (int j = 0; j < liczbaEpok; j++)
+                    wta.Ucz();
+                ArrayList[] tab;
+                tab = wta.DzielNaKlasy();
+                Console.Write(tab[0].Count);
+                Console.Write(tab[1].Count);
+                Console.WriteLine(tab[2].Count);
+                streamWriter.Write(tab[0].Count);
+                streamWriter.WriteLine(tab[1].Count);
+                streamWriter.WriteLine(tab[2].Count);
+            }
+            streamWriter.Close();
+            stopwatch.Stop();
+            long time = stopwatch.ElapsedMilliseconds;
+            Console.Write(time/60);
+            Console.WriteLine("s");
 
             Console.WriteLine("Zakonczono uczenie!");
+
+            
     
                 //zapis wyników do plików
                 /*FileStream fileStream = new FileStream("C:\\Users\\Dell Latitude 3330\\wszystkie_sieci.csv", FileMode.OpenOrCreate, FileAccess.ReadWrite);
