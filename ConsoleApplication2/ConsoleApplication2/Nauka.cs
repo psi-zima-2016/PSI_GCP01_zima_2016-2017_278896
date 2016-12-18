@@ -48,7 +48,7 @@ namespace ConsoleApplication2
                 temp[0] = ((double[])listaWalidujaca[i])[9];
                 double tempBlad;
                 tempBlad = siec.ObliczBlad(temp);
-                bledy[i] = tempBlad * tempBlad;
+                bledy[i] = (Math.Abs(temp[0] - tempBlad));
             }
             double bladWalidacji, suma = 0;
             for (int i=0; i < 75; i++)
@@ -62,7 +62,7 @@ namespace ConsoleApplication2
         {
             //kopiowanie listy uczącej
             ArrayList kopiaUczaca = new ArrayList();
-            for (int i = 0; i < 177; i++)
+            for (int i = 0; i < listaUczaca.Count; i++)
             {
                 kopiaUczaca.Add(new double[10]);
                 for (int j = 0; j < 10; j++)
@@ -72,8 +72,8 @@ namespace ConsoleApplication2
             }
             Random r = new Random();
             //tablica błędów cząstkowych epoki
-            double[] bledy = new double[177];
-            for (int i = 0; i<177; i++)
+            double[] bledy = new double[listaUczaca.Count];
+            for (int i = 0; i<listaUczaca.Count; i++)
             {
                 int los = r.Next(0, kopiaUczaca.Count);
                 ((Warstwa)siec.wejscia_sieci).UstawWyjscia((double[])kopiaUczaca[los]);
@@ -87,7 +87,7 @@ namespace ConsoleApplication2
                 double tempBlad;
                 ((Warstwa)siec.warstwy[siec.warstwy.Count - 1]).ObliczBledy(temp);
                 tempBlad = siec.ObliczBlad(temp);
-                bledy[i] = tempBlad*tempBlad;
+                bledy[i] = (Math.Abs(temp[0] - tempBlad));
                 //rzutowanie błędów wstecz
                 for (int j = siec.warstwy.Count - 1; j >= 0; j--)
                 {
@@ -101,12 +101,13 @@ namespace ConsoleApplication2
                 kopiaUczaca.RemoveAt(los); //usuwamy wykorzystane wektor z listy
             }
             double bladUczenia, suma = 0;
-            for (int i = 0; i<177; i++)
+            for (int i = 0; i<listaUczaca.Count; i++)
             {
                 suma += bledy[i];
             }
-            bladUczenia = suma / 177;
+            bladUczenia = suma / listaUczaca.Count;
             return bladUczenia;
+
         }
         public double UczRegulaOji()
         {

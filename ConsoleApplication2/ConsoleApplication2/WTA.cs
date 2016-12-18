@@ -108,8 +108,8 @@ namespace ConsoleApplication2
             ArrayList kopiaUczaca = new ArrayList();
             for (int i = 0; i < 177; i++)
             {
-                kopiaUczaca.Add(new double[9]);
-                for (int j = 0; j < 9; j++)
+                kopiaUczaca.Add(new double[10]);
+                for (int j = 0; j < 10; j++)
                 {
                     ((double[])kopiaUczaca[i])[j] = ((double[])listaUczaca[i])[j];
                 }

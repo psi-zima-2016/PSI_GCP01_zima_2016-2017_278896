@@ -27,6 +27,7 @@ namespace ConsoleApplication2
         {
             Random r = new Random();
             FunkcjaLiniowa f = new FunkcjaLiniowa();
+            FunkcjaSigmoidalna f1 = new FunkcjaSigmoidalna();
             int liczbaEpok = 100;
             int liczbaSieci = 100;
 
@@ -53,49 +54,91 @@ namespace ConsoleApplication2
 
             FileStream fileStream = new FileStream("C:\\Users\\Dell Latitude 3330\\Klasyfikacja.csv", FileMode.OpenOrCreate, FileAccess.ReadWrite);
             StreamWriter streamWriter = new StreamWriter(fileStream);
+            FileStream fileStream1 = new FileStream("C:\\Users\\Dell Latitude 3330\\CzasKlasyfikacji.csv", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+            StreamWriter streamWriter1 = new StreamWriter(fileStream1);
 
             Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
+            ArrayList[] tab = new ArrayList[3];
+
             for (int i = 0; i < liczbaSieci; i++)
             {
                 for (int j = 0; j < sieci.Count; j++)
                     ((Siec)sieci[j]).LosujWagi(-1, 1, r);
                 WTA wta = new WTA(liczbaEpok, 0.1, sieci, dane);
+                stopwatch.Restart();
                 for (int j = 0; j < liczbaEpok; j++)
                     wta.Ucz();
-                ArrayList[] tab;
+
                 tab = wta.DzielNaKlasy();
-                Console.Write(tab[0].Count);
-                Console.Write(tab[1].Count);
-                Console.WriteLine(tab[2].Count);
-                streamWriter.Write(tab[0].Count);
+                streamWriter.WriteLine(tab[0].Count);
                 streamWriter.WriteLine(tab[1].Count);
                 streamWriter.WriteLine(tab[2].Count);
+                stopwatch.Stop();
+                long time = stopwatch.ElapsedMilliseconds;
+                streamWriter1.WriteLine(time);
             }
             streamWriter.Close();
-            stopwatch.Stop();
-            long time = stopwatch.ElapsedMilliseconds;
-            Console.Write(time/60);
-            Console.WriteLine("s");
+            streamWriter1.Close();
+            Console.WriteLine("Zakonczono klasyfikacje!");
+
+            fileStream = new FileStream("C:\\Users\\Dell Latitude 3330\\CzasUczenia.csv", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+            streamWriter = new StreamWriter(fileStream);
+            ArrayList sieci1 = new ArrayList(150);
+            for (int i = 0; i < 150; i++)
+            {
+                sieci1.Add(new Siec(3));
+                ((Siec)sieci1[i]).wejscia_sieci = new Warstwa(9, f1);
+                ((Siec)sieci1[i]).DodajWarstwe(new Warstwa(9, f1));
+                ((Siec)sieci1[i]).DodajWarstwe(new Warstwa(5, f1));
+                ((Siec)sieci1[i]).DodajWarstwe(new Warstwa(1, f1));
+                ((Siec)sieci1[i]).PolaczWarstwy();
+                ((Siec)sieci1[i]).LosujWagi(-1,1,r);
+            }
+            ArrayList nauka = new ArrayList(150);
+            dane.zbior_uczacy = tab[0];
+            for (int i = 0; i < 50; i++)
+            {
+                nauka.Add(new Nauka(100, 0.2, (Siec)sieci1[i], dane));
+            }
+            dane.zbior_uczacy = tab[1];
+            for (int i = 50; i < 100; i++)
+            {
+                nauka.Add(new Nauka(100, 0.2, (Siec)sieci1[i], dane));
+            }
+            dane.zbior_uczacy = tab[2];
+            for (int i = 100; i < 150;i++)
+            {
+                nauka.Add(new Nauka(100, 0.2, (Siec)sieci1[i], dane));
+            }
+
+            for (int i = 0; i < 150; i++)
+            {
+                stopwatch.Restart();
+                ((Nauka)nauka[i]).Uczenie();
+                stopwatch.Stop();
+                long time = stopwatch.ElapsedMilliseconds;
+                streamWriter.WriteLine(time);
+            }
+            streamWriter.Close();
 
             Console.WriteLine("Zakonczono uczenie!");
 
             
     
                 //zapis wyników do plików
-                /*FileStream fileStream = new FileStream("C:\\Users\\Dell Latitude 3330\\wszystkie_sieci.csv", FileMode.OpenOrCreate, FileAccess.ReadWrite);
-                StreamWriter streamWriter = new StreamWriter(fileStream);
+                fileStream = new FileStream("C:\\Users\\Dell Latitude 3330\\BledyUczeniaSieci.csv", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                streamWriter = new StreamWriter(fileStream);
 
-                double[] bledySieci = new double[liczbaSieci];
+                double[] bledySieci = new double[150];
                 for (int i = 0; i < liczbaSieci;i++)
                 {
-                    bledySieci[i] = znajdzMinimum(uczoneSieci[i].bledyUczenia, liczbaEpok);
+                    bledySieci[i] = znajdzMinimum(((Nauka)nauka[i]).bledyUczenia, liczbaEpok);
                     streamWriter.WriteLine(bledySieci[i]);
                 }
                 streamWriter.WriteLine();
                 streamWriter.Close();
 
-                fileStream = new FileStream("C:\\Users\\Dell Latitude 3330\\naj_siec_uczenie.csv", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                fileStream = new FileStream("C:\\Users\\Dell Latitude 3330\\BledyUczeniaNajSieci.csv", FileMode.OpenOrCreate, FileAccess.ReadWrite);
                 streamWriter = new StreamWriter(fileStream);
 
                 int naj_siec = 0;
@@ -107,18 +150,20 @@ namespace ConsoleApplication2
                 }
                 for (int i = 0; i < liczbaEpok; i++)
                 {
-                    streamWriter.WriteLine(uczoneSieci[naj_siec].bledyUczenia[i]);
+                    streamWriter.WriteLine(((Nauka)nauka[naj_siec]).bledyUczenia[i]);
                 }
                 streamWriter.Close();
 
-                fileStream = new FileStream("C:\\Users\\Dell Latitude 3330\\naj_siec_walidacja.csv", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                fileStream = new FileStream("C:\\Users\\Dell Latitude 3330\\BledyWalidacjiNajSieci.csv", FileMode.OpenOrCreate, FileAccess.ReadWrite);
                 streamWriter = new StreamWriter(fileStream);
 
                 for (int i = 0; i < liczbaEpok; i++)
                 {
-                    streamWriter.WriteLine(uczoneSieci[naj_siec].bledyWalidacji[i]);
+                    streamWriter.WriteLine(((Nauka)nauka[naj_siec]).bledyWalidacji[i]);
                 }
-                streamWriter.Close();*/
+                streamWriter.Close();
+
+                Console.WriteLine("Zakonczono zapis do pliku!");
 
                 /*fileStream = new FileStream("C:\\Users\\Dell Latitude 3330\\naj_neuron_wagi.csv", FileMode.OpenOrCreate, FileAccess.ReadWrite);
                 streamWriter = new StreamWriter(fileStream);

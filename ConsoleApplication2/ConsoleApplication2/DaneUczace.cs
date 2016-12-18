@@ -65,38 +65,44 @@ namespace ConsoleApplication2
                 if (SprawdzCzyWygralKrzyzyk(temp1) == 1)
                 {
                     temp1[9] = 1;
+                    /*temp1[9] = 1;
                     temp1[10] = -1;
-                    temp1[11] = -1;
+                    temp1[11] = -1;*/
                 }
                 if (SprawdzCzyWygralKrzyzyk(temp1) == 0)
                 {
-                    temp1[9] = -1;
+                    temp1[9] = 0;
+                    /*temp1[9] = -1;
                     temp1[10] = 1;
-                    temp1[11] = -1;
+                    temp1[11] = -1;*/
                 }
                 if (SprawdzCzyWygralKrzyzyk(temp1) == -1)
                 {
-                    temp1[9] = -1;
+                    temp1[9] = 0;
+                    /*temp1[9] = -1;
                     temp1[10] = -1;
-                    temp1[11] = 1;
+                    temp1[11] = 1;*/
                 }
                 if (SprawdzCzyWygralKrzyzyk(temp2) == 1)
                 {
-                    temp1[9] = 1;
-                    temp1[10] = -1;
-                    temp1[11] = -1;
+                    temp2[9] = 1;
+                    /*temp2[9] = 1;
+                    temp2[10] = -1;
+                    temp2[11] = -1;*/
                 }
                 if (SprawdzCzyWygralKrzyzyk(temp2) == 0)
                 {
-                    temp1[9] = -1;
-                    temp1[10] = 1;
-                    temp1[11] = -1;
+                    temp2[9] = 0;
+                    /*temp2[9] = -1;
+                    temp2[10] = 1;
+                    temp2[11] = -1;*/
                 }
                 if (SprawdzCzyWygralKrzyzyk(temp2) == -1)
                 {
-                    temp1[9] = -1;
-                    temp1[10] = -1;
-                    temp1[11] = 1;
+                    temp2[9] = 0;
+                    /*temp2[9] = -1;
+                    temp2[10] = -1;
+                    temp2[11] = 1;*/
                 }
                 for (int j = 0; j < 12; j++)
                 {
